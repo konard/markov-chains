@@ -12,3 +12,5 @@ Inspired by https://www.youtube.com/watch?v=KZeIEiBrT_w and https://moebio.com/m
 What if we learn probabilities of markov chains and just add additional layer of random choices. Would we end with something similar to GPT?
 
 Do we need addtional attention mechanism, or it is just and optimization trick that was required to make GPTs parallelazible?
+
+Is it possible to just `download` the weights of the neural network into markov chains using large dataset of words (prompts) by setting temperature to zero?
