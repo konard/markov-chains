@@ -1,4 +1,4 @@
-import { expect, test, describe } from "bun:test";
+import { expect, test, describe, beforeEach, afterEach } from "bun:test";
 import { execSync } from 'child_process';
 
 function clink(pattern) {
@@ -12,12 +12,33 @@ function clink(pattern) {
 
 function clinkGetAfter(pattern) {
   const result = clink(pattern);
-  const lines = result.split('\n');
-  // The "after" state is typically the last line(s) after the pattern
-  return lines.length > 1 ? lines.slice(1).join('\n') : '';
+  const lines = result.split('\n').filter(line => line.trim());
+  // Find the last line that contains actual link data (not the pattern)
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const line = lines[i];
+    if (line.match(/^\(\d+: .+ .+\)$/)) {
+      return line;
+    }
+  }
+  return '';
+}
+
+function clearAllLinks() {
+  try {
+    clink('((($i: $s $t)) ())');
+  } catch (error) {
+    // Ignore errors when clearing
+  }
 }
 
 describe("clink basic operations", () => {
+  beforeEach(() => {
+    clearAllLinks();
+  });
+
+  afterEach(() => {
+    clearAllLinks();
+  });
   test("create and read a link", () => {
     // Create a link
     const createResult = clinkGetAfter('() ((1 1))');
@@ -29,6 +50,9 @@ describe("clink basic operations", () => {
   });
 
   test("update a link", () => {
+    // First create a link to update
+    clinkGetAfter('() ((1 1))');
+    
     // Update the link from (1 1) to (1 2)
     const updateResult = clinkGetAfter('((1: 1 1)) ((1: 1 2))');
     expect(updateResult).toBe('(1: 1 2)');

@@ -1,12 +1,26 @@
-import { expect, test, describe, beforeAll } from "bun:test";
+import { expect, test, describe, beforeEach, afterEach } from "bun:test";
 import { parseTextToStates, getTransitions, countTransitions } from './vowel-consonant-parser.mjs';
 import { calculateProbabilities } from './probability-calculator.mjs';
 import { storeAllTransitionCounts, clearMarkovData, getTransitionCounts } from './markov-clink-storage.mjs';
 import { generateSequence } from './text-generator.mjs';
+import { execSync } from 'child_process';
+
+function clearAllLinks() {
+  try {
+    execSync(`clink '(((\$i: \$s \$t)) ())'`, { encoding: 'utf8' });
+  } catch (error) {
+    // Ignore errors when clearing
+  }
+}
 
 describe("markov chain integration", () => {
-  beforeAll(() => {
+  beforeEach(() => {
+    clearAllLinks();
     clearMarkovData();
+  });
+
+  afterEach(() => {
+    clearAllLinks();
   });
 
   test("complete workflow from text to generation", () => {

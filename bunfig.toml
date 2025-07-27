@@ -1,0 +1,4 @@
+[test]
+# Run tests serially to avoid clink database conflicts
+timeout = 30000
+serial = true

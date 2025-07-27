@@ -1,9 +1,19 @@
-import { expect, test, describe, beforeAll } from "bun:test";
+import { expect, test, describe, beforeEach, afterEach } from "bun:test";
 import { getNextState, generateSequence, sequenceToString } from './text-generator.mjs';
 import { storeAllTransitionCounts, clearMarkovData } from './markov-clink-storage.mjs';
+import { execSync } from 'child_process';
+
+function clearAllLinks() {
+  try {
+    execSync(`clink '(((\$i: \$s \$t)) ())'`, { encoding: 'utf8' });
+  } catch (error) {
+    // Ignore errors when clearing
+  }
+}
 
 describe("text generator", () => {
-  beforeAll(() => {
+  beforeEach(() => {
+    clearAllLinks();
     clearMarkovData();
     // Set up test data with predictable probabilities
     storeAllTransitionCounts({
@@ -12,6 +22,10 @@ describe("text generator", () => {
       'C_V': 9,  // 90% chance C->V
       'C_C': 1   // 10% chance C->C
     });
+  });
+
+  afterEach(() => {
+    clearAllLinks();
   });
 
   test("getNextState selects based on probabilities", () => {

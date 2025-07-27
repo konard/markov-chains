@@ -1,14 +1,28 @@
-import { expect, test, describe, beforeEach } from "bun:test";
+import { expect, test, describe, beforeEach, afterEach } from "bun:test";
 import { 
   clearMarkovData, 
   storeTransitionCount, 
   getTransitionCounts,
   storeAllTransitionCounts 
 } from './markov-clink-storage.mjs';
+import { execSync } from 'child_process';
+
+function clearAllLinks() {
+  try {
+    execSync(`clink '(((\$i: \$s \$t)) ())'`, { encoding: 'utf8' });
+  } catch (error) {
+    // Ignore errors when clearing
+  }
+}
 
 describe("markov clink storage", () => {
   beforeEach(() => {
+    clearAllLinks();
     clearMarkovData();
+  });
+
+  afterEach(() => {
+    clearAllLinks();
   });
 
   test("storeTransitionCount stores a transition", () => {
