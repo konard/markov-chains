@@ -16,6 +16,11 @@ Do we need addtional attention mechanism, or it is just and optimization trick t
 
 Is it possible to just `download` the weights of the neural network into markov chains using large dataset of words (prompts) by setting temperature to zero?
 
+https://en.wikipedia.org/wiki/Probabilistic_logic
+https://en.wikipedia.org/wiki/Bayesian_probability
+https://en.wikipedia.org/wiki/Markov_logic_network
+https://en.wikipedia.org/wiki/Statistical_relational_learning
+
 ## Implementation
 
 This project demonstrates using link-cli as a database for storing and retrieving Markov chain transition probabilities.
